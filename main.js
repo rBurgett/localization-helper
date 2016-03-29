@@ -67,8 +67,18 @@ define([
             },
             events: {
                 'click .js-deleteKeyBtn': 'deleteKeyBtnClicked',
+                'click .js-copyHbsBtn': 'copyHbsBtnClicked',
+                'click .js-copyJsBtn': 'copyJsBtnClicked',
                 'keyup .js-keyInput': 'updateKey',
                 'keyup .js-valueInput': 'updateValue'
+            },
+            copyHbsBtnClicked: function(e) {
+                e.preventDefault();
+                console.log('copyHbsBtnClicked');
+            },
+            copyJsBtnClicked: function(e) {
+                e.preventDefault();
+                console.log('copyJsBtnClicked');
             },
             updateKey: function(e) {
                 e.preventDefault();
