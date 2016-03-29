@@ -30,6 +30,13 @@ module.exports = function(grunt) {
                     }
                 }
             }
+        },
+
+        watch: {
+            app: {
+                files: ['app/**/*', 'package.json'],
+                tasks: ['copy']
+            }
         }
 
         // nwjs: {
@@ -53,7 +60,7 @@ module.exports = function(grunt) {
 
 // 4. Where we tell Grunt what to do when we type 'grunt' into the terminal.
 
-    grunt.registerTask('build', ['cssmin', 'uglify', 'copy', 'babel', 'webpack']);
+    grunt.registerTask('build', ['copy']);
 
     grunt.registerTask('build-native', ['nwjs', 'win-exe-rename', 'win-installer-version-update']);
 
