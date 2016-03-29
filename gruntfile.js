@@ -39,17 +39,17 @@ module.exports = function(grunt) {
             }
         }
 
-        // nwjs: {
-        //     options: {
-        //         platforms: ['win', 'osx64'],
-        //         // platforms: ['win', 'osx64', 'linux'],
-        //         // platforms: ['win'],
-        //         buildDir: './build-native',
-        //         version: 'v0.12.3',
-        //         winIco: (process.platform !== 'darwin') ? './build/images/favicon.ico' : ''
-        //     },
-        //     src: ['./build/**']
-        // }
+        nwjs: {
+            options: {
+                platforms: ['win', 'osx64'],
+                // platforms: ['win', 'osx64', 'linux'],
+                // platforms: ['win'],
+                buildDir: './build-native',
+                version: 'v0.12.3',
+                winIco: (process.platform !== 'darwin') ? './build/favicon.ico' : ''
+            },
+            src: ['./build/**']
+        }
 
     });
 
