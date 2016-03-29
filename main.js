@@ -17,7 +17,10 @@ require.config({
         bootstrap: 'lib/bootstrap.min',
         fileSaver: 'lib/FileSaver',
 
-        ui: 'lib/ui/'
+        ui: 'lib/ui/',
+
+        clipboard: 'lib/clipboard',
+        uuid: 'lib/uuid'
     },
 
     shim: {
@@ -54,9 +57,11 @@ define([
         'lodash',
         'handlebars',
         'ui/button/Button',
-        'fileSaver'
+        'fileSaver',
+        'uuid',
+        'clipboard'
     ],
-    function (Marionette, Backbone, $, Bootstrap, _, Handlebars, Button, saveAs) {
+    function (Marionette, Backbone, $, Bootstrap, _, Handlebars, Button, saveAs, uuid, Clipboard) {
         'use strict';
 
         var contextCollections = {};
@@ -67,18 +72,8 @@ define([
             },
             events: {
                 'click .js-deleteKeyBtn': 'deleteKeyBtnClicked',
-                'click .js-copyHbsBtn': 'copyHbsBtnClicked',
-                'click .js-copyJsBtn': 'copyJsBtnClicked',
                 'keyup .js-keyInput': 'updateKey',
                 'keyup .js-valueInput': 'updateValue'
-            },
-            copyHbsBtnClicked: function(e) {
-                e.preventDefault();
-                console.log('copyHbsBtnClicked');
-            },
-            copyJsBtnClicked: function(e) {
-                e.preventDefault();
-                console.log('copyJsBtnClicked');
             },
             updateKey: function(e) {
                 e.preventDefault();
@@ -97,6 +92,26 @@ define([
             deleteKeyBtnClicked: function(e) {
                 e.preventDefault();
                 this.trigger('deleteKey');
+            },
+            onRender: function() {
+
+                var copyId = 'a' + uuid.v4();
+                var hbsId = copyId + 'hbs';
+                var jsId = copyId + 'js';
+
+                this.$('.js-hCode').attr('id', hbsId);
+                this.$('.js-jCode').attr('id', jsId);
+
+                this.$('.js-copyHbsBtn').attr('data-clipboard-target', '#' + hbsId);
+                this.$('.js-copyJsBtn').attr('data-clipboard-target', '#' + jsId);
+
+                this.hbsClipboard = new Clipboard(this.$('.js-copyHbsBtn')[0]);
+                this.jsClipboard = new Clipboard(this.$('.js-copyJsBtn')[0]);
+
+            },
+            onBeforeDestroy: function() {
+                this.hbsClipboard.destroy();
+                this.jsClipboard.destroy();
             }
         });
 
