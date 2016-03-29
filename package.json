@@ -1,0 +1,15 @@
+{
+    "name": "localizationHelper",
+    "version": "0.0.1",
+    "main": "index.html",
+    "nodejs": false,
+    "window": {
+        "toolbar": true,
+        "width": 1000,
+        "height": 600,
+        "icon": "favicon.png"
+    },
+    "scripts": {
+        "start": "nw ."
+    }
+}

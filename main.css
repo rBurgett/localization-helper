@@ -1,0 +1,9 @@
+table.table-hover tr {
+    cursor: pointer;
+}
+button.conDelBtn {
+      opacity: .3;
+}
+button.conDelBtn:hover {
+    opacity: .8;
+}
