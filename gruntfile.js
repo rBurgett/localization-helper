@@ -56,9 +56,12 @@ module.exports = function(grunt) {
 // 3. Where we tell Grunt we plan to use this plug-in.
 
     grunt.loadNpmTasks('grunt-contrib-copy');
+    grunt.loadNpmTasks('grunt-contrib-watch');
     // grunt.loadNpmTasks('grunt-nw-builder');
 
 // 4. Where we tell Grunt what to do when we type 'grunt' into the terminal.
+
+    grunt.registerTask('default', ['copy']);
 
     grunt.registerTask('build', ['copy']);
 
