@@ -37,7 +37,7 @@ module.exports = function(grunt) {
                 files: ['app/**/*', 'package.json'],
                 tasks: ['copy']
             }
-        }
+        },
 
         nwjs: {
             options: {
@@ -57,7 +57,7 @@ module.exports = function(grunt) {
 
     grunt.loadNpmTasks('grunt-contrib-copy');
     grunt.loadNpmTasks('grunt-contrib-watch');
-    // grunt.loadNpmTasks('grunt-nw-builder');
+    grunt.loadNpmTasks('grunt-nw-builder');
 
 // 4. Where we tell Grunt what to do when we type 'grunt' into the terminal.
 
@@ -65,7 +65,7 @@ module.exports = function(grunt) {
 
     grunt.registerTask('build', ['copy']);
 
-    grunt.registerTask('build-native', ['nwjs', 'win-exe-rename', 'win-installer-version-update']);
+    grunt.registerTask('build-native', ['nwjs']);
 
 // 5. Custom tasks
 

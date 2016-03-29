@@ -1,0 +1,28 @@
+{
+    "parserOptions": {
+        "sourceType": "module",
+        "ecmaFeatures": {
+            "jsx": true
+        }
+    },
+    "extends": [
+        "eslint:recommended"
+    ],
+    "rules": {
+        "no-redeclare": 1,
+        "quotes": [1, "single", "avoid-escape"],
+        "semi": 2,
+        "no-console": 0,
+        "no-alert": 0,
+        "no-unused-vars": 1
+    },
+    "plugins": [],
+    "env": {
+        "browser": true,
+        "node": true,
+        "es6": true
+    },
+    "globals": {
+        "define": false
+    }
+}
