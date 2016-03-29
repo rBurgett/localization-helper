@@ -384,7 +384,7 @@ define([
                 this.loadBtnRegion.show(loadBtn);
                 loadBtn.on({
                     click: function() {
-                        parent.$('.js-loadFile').on({
+                        parent.$('.js-loadFile').unbind().on({
                             change: function(e) {
                                 e.preventDefault();
                                 var readFile = new FileReader();
