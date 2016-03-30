@@ -17,6 +17,7 @@
     "grunt": "^0.4.5",
     "grunt-contrib-copy": "^1.0.0",
     "grunt-contrib-watch": "^1.0.0",
-    "grunt-nw-builder": "https://github.com/rBurgett/grunt-nw-builder.git"
+    "grunt-nw-builder": "https://github.com/rBurgett/grunt-nw-builder.git",
+    "lodash": "^4.6.1"
   }
 }
