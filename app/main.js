@@ -215,6 +215,12 @@ define([
         });
 
         var HeaderView = Marionette.ItemView.extend({
+            events: {
+                'click .navbar-brand': 'brandClicked'
+            },
+            brandClicked: function(e) {
+                e.preventDefault();
+            },
             template: function(data) {
                 return Handlebars.compile($('#js-headerTemplate').html())(data);
             }
