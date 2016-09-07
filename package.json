@@ -1,5 +1,6 @@
 {
-  "name": "localizationHelper",
+  "name": "LocalizationHelper",
+  "description": "Generates JSON files of localized text for use with applications.",
   "version": "0.1.0",
   "main": "index.html",
   "nodejs": false,
@@ -10,9 +11,12 @@
     "icon": "favicon.png"
   },
   "scripts": {
-    "start": "cd app && nw ."
+    "start": "cd build && nw .",
+    "build": "grunt build",
+    "build-native": "grunt build-native"
   },
   "devDependencies": {
+    "colors": "^1.1.2",
     "fs-extra": "^0.26.7",
     "grunt": "^0.4.5",
     "grunt-contrib-copy": "^1.0.0",
