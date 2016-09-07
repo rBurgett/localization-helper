@@ -1,11 +1,12 @@
 define([
         'backbone',
         'backbone.marionette',
-        'handlebars',
-        'text!ui/button/button.hbs'
+        'handlebars'
     ],
-    function (Backbone, Marionette, Handlebars, buttonTmp) {
+    function (Backbone, Marionette, Handlebars) {
         "use strict";
+
+        var buttonTmp = '<button type="{{type}}" class="btn btn-{{style}} {{positionClass}} {{#if small}}btn-sm{{/if}} {{#if large}}btn-lg{{/if}}" {{#if fill}}style="width:100%;"{{/if}}>{{{text}}}</button>';
 
         var ButtonModel = Backbone.Model.extend({
             defaults: {

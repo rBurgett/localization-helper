@@ -41,12 +41,12 @@ module.exports = function(grunt) {
 
         nwjs: {
             options: {
-                platforms: ['win', 'osx64'],
-                // platforms: ['win', 'osx64', 'linux'],
+                // platforms: ['win', 'osx64'],
+                platforms: ['win', 'osx64', 'linux'],
                 // platforms: ['win'],
                 buildDir: './build-native',
                 version: 'v0.12.3',
-                winIco: (process.platform !== 'darwin') ? './build/favicon.ico' : ''
+                winIco: (process.platform === 'win32') ? './build/favicon.ico' : ''
             },
             src: ['./build/**']
         }
