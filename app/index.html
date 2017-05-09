@@ -1,193 +1,29 @@
-<!DOCTYPE html>
-<html>
+<!doctype html>
+<html lang="en">
+
 <head>
     <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
-    <title>Literacy Starter Localization Helper</title>
-    <link rel="shortcut icon" href="favicon.ico">
+    <link rel="shortcut icon" href="./images/favicon.ico">
+    <title>Localization Helper</title>
 
-    <!-- Bootstrap -->
-    <link href="bootstrap/css/bootstrap.css" rel="stylesheet">
-
-    <link href="main.css" rel="stylesheet">
+    <link rel="stylesheet" href="./css/bootstrap.css"/>
+    <link rel="stylesheet" href="./css/sweetalert.css"/>
+    <link rel="stylesheet" href="./css/main.css"/>
 
 </head>
+
 <body>
+    <div id="root"></div>
 
-    <div id="js-appRegion"></div>
+    <script type="text/javascript" src="./vendor/jquery.js"></script>
+    <script type="text/javascript" src="./vendor/bootstrap.min.js"></script>
+    <script type="text/javascript" src="./vendor/FileSaver.js"></script>
+    <script type="text/javascript" src="./vendor/clipboard.js"></script>
 
-    <script data-main="main" src="lib/require.js"></script>
-
-    <script type="text/x-handlebars" id="js-headerTemplate">
-        <div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
-            <div class="container-fluid">
-                <div class="navbar-header">
-                    <a class="navbar-brand" href="#" style="color:#9d9d9d;cursor:default;">NTM Literacy Starter Localization Helper</a>
-                </div>
-                <ul class="nav navbar-nav">
-                    <!--li class="active"><a href="#">Home</a></li>
-                    <li><a href="#about">About</a></li>
-                    <li><a href="#contact">Contact</a></li-->
-                </ul>
-            </div>
-        </div>
-    </script>
-
-    <script type="text/x-handlebars" id="js-keyListItemTemplate">
-        <div style="border-style:solid;border-color:#AAAAAA;border-width:1px;padding:10px;margin-bottom: 10px;">
-            <div class="row">
-                <div class="col-sm-6">
-                    <div class="form-group">
-                        <label>Key</label>
-                        <input type="text" class="form-control js-keyInput input-sm" value="{{key}}" placeholder="Key">
-                    </div>
-                    <div class="form-group">
-                        <label>Context</label>
-                        <input type="text" class="form-control input-sm" value="{{context}}" readonly>
-                    </div>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-sm-12">
-                    <div class="form-group">
-                        <label>Value</label>
-                        <input type="text" class="form-control input-sm js-valueInput" value="{{value}}" placeholder="Value">
-                    </div>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-sm-9">
-                    <form class="form-horizontal">
-                        <div class="row">
-                            <div class="form-group form-group-sm">
-                                <label class="col-sm-3 control-label">Handlebars</label>
-                                <div class="col-sm-8">
-                                    <input class="form-control js-hCode" style="font-family: monospace" type="text" value='\{{formatMessage (intlGet "{{key}}.{{context}}.val")}}' readonly>
-                                </div>
-                                <div className="col-sm-1">
-                                    <button type="button" class="btn btn-default btn-sm js-copyHbsBtn" title="Copy to clipboard"><span class="glyphicon glyphicon-copy"></span></button>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="form-group form-group-sm">
-                                <label class="col-sm-3 control-label">JavaScript</label>
-                                <div class="col-sm-8">
-                                    <input class="form-control js-jCode" style="font-family: monospace" type="text" value="Localize.text('{{key}}', '{{context}}')" readonly>
-                                </div>
-                                <div className="col-sm-1">
-                                    <button type="button" class="btn btn-default btn-sm js-copyJsBtn" title="Copy to clipboard"><span class="glyphicon glyphicon-copy"></span></button>
-                                </div>
-                            </div>
-                        </div>
-                    </form>
-                </div>
-            </div>
-            <button title="Delete key" type="button" class="pull-right btn btn-danger btn-sm js-deleteKeyBtn" style="margin-top:-30px;margin-right:0px;"><span class="glyphicon glyphicon-trash"></span></button>
-        </div>
-    </script>
-
-    <script type="text/x-handlebars" id="js-keyListTemplate">
-        <div class="pull-left" style="width:100%;margin-bottom:10px;">
-            {{#if ctxName}}
-                <button title="Add new key" type="button" class="pull-right btn btn-primary js-addNewKeyBtn"><span class="glyphicon glyphicon-plus"></span></button>
-                <h1 style="display:inline-block;margin:0px;padding:0px;max-width:75%;">{{ctxName}}</h1>
-                <button style="font-size:.8em;" type="button" class="btn btn-danger btn-sm conDelBtn" data-toggle="modal" data-target="#confirmDeleteContext"><!--span class="glyphicon glyphicon-trash"></span-->Delete Context</button>
-            {{/if}}
-        </div>
-        <div class="pull-left" style="width:100%;">
-            <form>
-
-            </form>
-        </div>
-
-        <!--Begin Bootstrap Modal-->
-        <div class="modal" id="confirmDeleteContext" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-            <div class="modal-dialog modal-sm">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-                        <h4 class="modal-title" id="myModalLabel">Confirm Delete</h4>
-                    </div>
-                    <div class="modal-body">
-                        Are you sure that you want to delete this context?
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-danger js-deleteContextConfirmed" data-dismiss="modal">Delete</button>
-                        <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <!--End Bootstrap Modal-->
-
-    </script>
-
-    <script type="text/x-handlebars" id="js-sidebarTemplate">
-        <div class="js-loadBtnRegion" style="margin-bottom:15px;"></div>
-        <div class="js-saveBtnContainer" style="display:none;margin-bottom:15px;">
-            <button title="Save locale file" type="button" class="btn btn-default js-saveLocaleFileBtn" style="width:100%;"><span class="glyphicon glyphicon-save"></span> Save Locale File</button>
-        </div>
-        <div style="margin-bottom:15px;display:none;" class="js-contextControls">
-            <button title="Add new context" type="button" class="pull-right btn btn-primary btn-sm" data-toggle="modal" data-target="#addNewContextModal"><span class="glyphicon glyphicon-plus"></span></button>
-            <h2 style="margin:0px;padding:0px;">Contexts</h2>
-        </div>
-
-        <input type="file" class="js-loadFile" style="display:none;">
-        <div class="js-contextListRegion"></div>
-
-        <!--Begin Bootstrap Modal-->
-        <div class="modal" id="addNewContextModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-                        <h4 class="modal-title" id="myModalLabel">Add New Context</h4>
-                    </div>
-                    <div class="modal-body">
-                        <div class="form-group">
-                            <label>Context Name</label>
-                            <input type="text" class="form-control js-newContextName" placeholder="Context Name">
-
-                        </div>
-                        <p>Enter a context name with the page name first (e.g. ProjectPage) followed by a dash and the child context (e.g. ProjectPage-FindFontDialog).</p>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-primary js-saveNewContext" data-dismiss="modal">Save</button>
-                        <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <!--End Bootstrap Modal-->
-
-    </script>
-
-    <script type="text/x-handlebars" id="js-contextListTemplate">
-        <table class="table table-hover">
-            <tbody></tbody>
-        </table>
-    </script>
-
-    <script type="text/x-handlebars" id="js-contextListItemTemplate">
-        <td title="{{name}}">{{shortName}}</td>
-    </script>
-
-    <script type="text/x-handlebars" id="js-appViewTemplate">
-        <div class="js-headerRegion"></div>
-        <div class="container-fluid">
-            <div class="row" style="padding-top:50px;">
-                <div class="col-sm-2" style="padding-top:15px;background-color:#EDEDED;">
-                    <div class="js-sidebarRegion"></div>
-                </div>
-                <div class="col-sm-10" style="padding-top:15px;">
-                    <div class="js-keyListRegion"></div>
-                </div>
-            </div>
-        </div>
-    </script>
+    <script type="text/javascript" src="./dist/native-api.js"></script>
+    <script type="text/javascript" src="./dist/index.js"></script>
 
 </body>
+
 </html>
