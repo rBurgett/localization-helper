@@ -103,6 +103,7 @@ class App extends React.Component {
 
         this.setState({
             ...this.state,
+            filter: '',     // clear the filter so the blank item is displayed
             context: newContext,
             data: [
                 ...this.state.data,
@@ -133,6 +134,7 @@ class App extends React.Component {
 
         this.setState({
             ...this.state,
+            filter: '',     // clear the filter so we will display the blank item we create
             data: [
                 createNewDataObject(context, newKey, newValue),
                 ...this.state.data
@@ -148,6 +150,8 @@ class App extends React.Component {
     }
 
     contextChanged(newSelectedContext) {
+        // I don't clear the filter here because user may be looking for something and doesn't know what context it is in,
+        //  so they want the filter applied when they change contexts.
         this.setState({
             ...this.state,
             context: newSelectedContext
@@ -225,9 +229,15 @@ class App extends React.Component {
         }
     }
 
+    _escapeRegExp(string) {
+        return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'); // $& means the whole matched string
+    }
+
     _getDataForContext() {
         if (this.state.data.length > 0) {
-            const regex = new RegExp(this.state.filter, 'gi');  // so we can make the filter case-insensitive
+            // Use a regex so we can make the filter case-insensitive.  Be sure to escape the filter so the user
+            //  can search for special characters like \, ?, or .
+            const regex = new RegExp(this._escapeRegExp(this.state.filter), 'i');
             return this.state.data
                 .filter(e => e.context === this.state.context)
                 //.filter(e => e.value.includes(this.state.filter));    // this is case-sensitive
