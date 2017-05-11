@@ -55,8 +55,8 @@ class KeylistItem extends React.Component {
          const myValue = keyValue[myKey];*/
         const jsValue = keyValue.key === '' ? '' : `Localize.text(\'${keyValue.key}\', \'${selectedContext}\')`;
         const handlebarValue = keyValue.key === '' ? '' : `{{formatMessage (intlGet \"${keyValue.key}.${selectedContext}.val\")}}`;
-        const copyHandlebarsTitle = 'Copy the Handlebars text to the clipboard';
-        const copyJavascriptTitle = 'Copy the Javascript text to the clipboard';
+        const copyHandlebarsTitle = 'Copy the Handlebars text to the clipboard (meta-h)';
+        const copyJavascriptTitle = 'Copy the Javascript text to the clipboard (meta-j)';
 
         let currentKey;
         let currentValue;
@@ -97,13 +97,15 @@ class KeylistItem extends React.Component {
         const onKeyDown = e => {
             // briefly change the background color of the text we copy, so the user knows the copy happened.
             if (e.metaKey) {
-                e.preventDefault();
-
+                // NOTE:  we must NOT call e.preventDefault() unless we fall into one of the if's below.
+                //  if we call it here, we lose our copy/paste, since those both use the meta key.
                 if (e.key === 'h') {
+                    e.preventDefault();
                     doCopy(handlebarValue);
                     this.setState({handlebarsHighlight: true});
                     setTimeout(() => this.setState({handlebarsHighlight: false}), 500);
                 } else if (e.key === 'j') {
+                    e.preventDefault();
                     doCopy(jsValue);
                     this.setState({javascriptHighlight: true});
                     setTimeout(() => this.setState({javascriptHighlight: false}), 500);
