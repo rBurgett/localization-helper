@@ -9,11 +9,11 @@ import Keylist from './Keylist.jsx';
 let {handleError, deserializeFile, serialize, createNewDataObject, writeFile} = nativeAPI;
 deserializeFile = deserializeFile.bind(nativeAPI);
 
- // - shift-enter as keyboard shortcut to add new key. use a package?  how decide what package?  e.g., https://www.npmjs.com/package/react-shortcuts and https://www.npmjs.com/package/react-hotkey
- //     - NO, in this case don't use a package.  Use onKeyDown in <input>.  Look up in React synthetic events, and MDN keydown
- //     - for finding packages in general, though:
- //         - assuming it looks like it will solve the problem:
- //         - check date is recent, recent # of downloads, current git issues, stars on git.  If no git repo, be wary.  But can search for it separately on GitHub - may just not be linked to the npm page.
+// - shift-enter as keyboard shortcut to add new key. use a package?  how decide what package?  e.g., https://www.npmjs.com/package/react-shortcuts and https://www.npmjs.com/package/react-hotkey
+//     - NO, in this case don't use a package.  Use onKeyDown in <input>.  Look up in React synthetic events, and MDN keydown
+//     - for finding packages in general, though:
+//         - assuming it looks like it will solve the problem:
+//         - check date is recent, recent # of downloads, current git issues, stars on git.  If no git repo, be wary.  But can search for it separately on GitHub - may just not be linked to the npm page.
 // - to understand the classes we use, review http://bootstrapdocs.com/v3.3.6/docs/
 // - to review handling events, see:  https://facebook.github.io/react/docs/events.html
 
@@ -35,6 +35,7 @@ class App extends React.Component {
             locale: '',
             context: '',
             filter: '',
+            activeId: '',
             data: {}
         };
 
@@ -61,7 +62,10 @@ class App extends React.Component {
     filterChanged(newFilter) {
         // We don't have to rebuild the whole state.  this.setState will merge our changes into the current state.
         //  So, we only need to include what changed.
-        this.setState({filter: newFilter});
+        this.setState({
+            activeId: '',
+            filter: newFilter
+        });
     }
 
     // Can/should we use property initializer syntax instead of binding?  https://facebook.github.io/react/blog/2015/01/27/react-v0.13.0-beta-1.html#autobinding
@@ -101,13 +105,15 @@ class App extends React.Component {
             return;
         }
 
+        const newObj = createNewDataObject(newContext, '', '');
         this.setState({
             ...this.state,
             filter: '',     // clear the filter so the blank item is displayed
             context: newContext,
+            activeId: newObj.id,
             data: [
                 ...this.state.data,
-                createNewDataObject(newContext, '', '')
+                newObj
             ]
         });
     }
@@ -119,6 +125,7 @@ class App extends React.Component {
         this.setState({
             ...this.state,
             context: '',
+            activeId: '',
             data: this.state.data.filter(e => e.context !== context)
             /* {
              // If we want a functional way to delete from an object, such as:
@@ -132,11 +139,13 @@ class App extends React.Component {
 
     addNewKeyValue(context, newKey, newValue) {
 
+        const newObj = createNewDataObject(context, newKey, newValue);
         this.setState({
             ...this.state,
             filter: '',     // clear the filter so we will display the blank item we create
+            activeId: newObj.id,
             data: [
-                createNewDataObject(context, newKey, newValue),
+                newObj,
                 ...this.state.data
             ]
         });
@@ -145,6 +154,7 @@ class App extends React.Component {
     deleteKeyValue(id) {
         this.setState({
             ...this.state,
+            activeId: this.state.activeId == id ? '' : this.state.activeId, // if we are deleting the item with focus, set no item to be active.
             data: this.state.data.filter(e => e.id !== id)
         });
     }
@@ -154,6 +164,7 @@ class App extends React.Component {
         //  so they want the filter applied when they change contexts.
         this.setState({
             ...this.state,
+            activeId: '',   // changed contexts, so the old activeId can't be visible anymore.
             context: newSelectedContext
         });
     }
@@ -202,6 +213,7 @@ class App extends React.Component {
 
         this.setState({
             ...this.state,
+            activeId: id,
             data: this.state.data.map(kv => kv.id === id ?
                 {
                     id: id,
@@ -240,8 +252,7 @@ class App extends React.Component {
             const regex = new RegExp(this._escapeRegExp(this.state.filter), 'i');
             return this.state.data
                 .filter(e => e.context === this.state.context)
-                //.filter(e => e.value.includes(this.state.filter));    // this is case-sensitive
-                .filter(e => regex.test(e.value));
+                .filter(e => (e.id === this.state.activeId || regex.test(e.value)));    // don't let the item being edited get filtered out
         }
 
         return [];
