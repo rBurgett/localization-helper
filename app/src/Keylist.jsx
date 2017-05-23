@@ -1,7 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import co from 'co';
-import {promiseAlert, swal} from 'promise-alert';
+import {swal} from 'promise-alert';
 
 import KeylistItem from './KeylistItem.jsx';
 
@@ -83,9 +82,12 @@ const Keylist = ({dataForContext, selectedContext, filter, windowHeight, keyValu
     //  We should do that here, so we can call addKeyValue() here.
     //  See https://jsfiddle.net/ryanburgett/njr3nmm8/
     const onKeyDown = e => {
-        if (e.key === 'Enter' && (e.shiftKey || e.ctrlKey)) {
+        if (e.key === 'Enter' && (e.shiftKey || e.ctrlKey || e.metaKey || e.altKey)) {
             e.preventDefault();
             addKeyValue();
+        } else if (e.key === 'f' && e.ctrlKey && e.metaKey) {
+            e.preventDefault();
+            filterChanged('');
         }
     };
 
@@ -93,6 +95,12 @@ const Keylist = ({dataForContext, selectedContext, filter, windowHeight, keyValu
         e.preventDefault();
 
         filterChanged(currentFilter.value);
+    };
+
+    const onClearFilterClick = e => {
+        e.preventDefault();
+
+        filterChanged('');
     };
 
     // generate a KeylistItem for every key-value pair in this context
@@ -122,7 +130,8 @@ const Keylist = ({dataForContext, selectedContext, filter, windowHeight, keyValu
                     {/* it is no longer necessary to disable the button when there already is a blank key,
                      since we no longer use the key as the unique identifier.  We now use id's.
                      disabled={ dataForContext.findIndex(kv => kv.key === '') > -1 ? 'disabled' : '' }*/}
-                    <button title="Add new key (ctrl/shift-enter)" type="button" className="pull-right btn btn-primary"
+                    <button title="Add new key (ctrl/shift/alt/meta-Enter)" type="button"
+                            className="pull-right btn btn-primary btn-lg"
                             onClick={onAddKeyValueClick}>
                         <span className="glyphicon glyphicon-plus" />
                     </button>
@@ -135,7 +144,12 @@ const Keylist = ({dataForContext, selectedContext, filter, windowHeight, keyValu
                         <div className="form-group">
                             {/* we don't need this, since the placeholder text is clear as to what the textbox is for.
                              <label className="col-lg-1 control-label">Filter:</label>  */}
-                            <div className="col-lg-6">
+                            <div className="col-lg-1">
+                                <button className="btn btn-default btn-lg" type="button" title="Clear Filter (ctrl-meta-f)"
+                                        onClick={onClearFilterClick}>Clear
+                                </button>
+                            </div>
+                            <div className="col-lg-5">
                                 <input ref={node => currentFilter = node} type="text"
                                        className="form-control input-lg js-filterInput"
                                        value={filter} placeholder="Unfiltered" onChange={onFilterChange} />
