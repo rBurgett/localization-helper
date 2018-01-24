@@ -306,6 +306,14 @@ window.nativeAPI = {
         return fs.writeFileSync(path.normalize(filePath), data, 'utf8');
     },
 
+    CreateLocalesEnJson(newPath) {
+        const folder = path.join(path.dirname(newPath), 'locales');
+        fs.ensureDirSync(folder);
+        const finalPath = path.join(folder, 'en.json');
+        fs.writeJsonSync(finalPath, { "locale": "en-US" });
+        return finalPath;
+    },
+
     Clipboard: nw.Clipboard,
 
     deserializeFile(newPath) {

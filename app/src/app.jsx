@@ -6,7 +6,7 @@ import Sidebar from './Sidebar.jsx';
 import Keylist from './Keylist.jsx';
 
 // changed from const to let, and bind nativeAPI.  This allows deserializeFile to call readFile.
-let {handleError, deserializeFile, serialize, createNewDataObject, writeFile} = nativeAPI;
+let { handleError, deserializeFile, serialize, createNewDataObject, writeFile, CreateLocalesEnJson } = nativeAPI;
 deserializeFile = deserializeFile.bind(nativeAPI);
 
 // - shift-enter as keyboard shortcut to add new key. use a package?  how decide what package?  e.g., https://www.npmjs.com/package/react-shortcuts and https://www.npmjs.com/package/react-hotkey
@@ -70,12 +70,21 @@ class App extends React.Component {
 
     // Can/should we use property initializer syntax instead of binding?  https://facebook.github.io/react/blog/2015/01/27/react-v0.13.0-beta-1.html#autobinding
     //  - that syntax may not be available yet.  In any case, Ryans says it is just a matter of personal style.
-    filePathChanged(newPath) {
-        const deserializedData = deserializeFile(newPath);
+    filePathChanged(newPath, create) {
+        let finalPath;
+
+        if (create) {
+            // create a new en.json
+            finalPath = CreateLocalesEnJson(newPath);
+        } else {
+            finalPath = newPath;
+        }
+
+        const deserializedData = deserializeFile(finalPath);
 
         this.setState({
             ...this.state,
-            loadedFile: newPath,
+            loadedFile: finalPath,
             locale: deserializedData.locale,
             data: deserializedData.data
         });

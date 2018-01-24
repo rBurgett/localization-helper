@@ -53,8 +53,9 @@ const Sidebar = ({allContexts, selectedContext, myFile, windowHeight, filePathCh
     let fileInput;  // variable to store a reference to the <input> component, so we can use it in other code
     let fileSaveAs;
     let btnSave;
+    let createFile = false;
 
-    const fileIsLoaded = allContexts.length > 0;    // if we have contexts, we've loaded a file.
+    const fileIsLoaded = myFile.length > 0;
 
     const onAddContextClick = e => {
         e.preventDefault();
@@ -129,12 +130,21 @@ const Sidebar = ({allContexts, selectedContext, myFile, windowHeight, filePathCh
         fileInput.setAttribute('disabled', 'disabled');
     };
 
+    const onCreateFileClick = e => {
+        e.preventDefault();
+
+        createFile = true;
+        fileInput.click();
+
+        fileInput.setAttribute('disabled', 'disabled');
+    };
+
     const onLoadFileInputChanged = (e) => {
         e.preventDefault();
 
         const {files} = e.target;   // e.target.files is an array of all selected files.  We only allow selecting 1 file.
         const [file] = files;   // sets file equal to first item in files array.  This is destructuring assignment for an array, above is the same thing for an object.
-        filePathChanged(file.path);
+        filePathChanged(file.path, createFile);
     };
 
     const onSaveFileClick = e => {
@@ -226,7 +236,13 @@ const Sidebar = ({allContexts, selectedContext, myFile, windowHeight, filePathCh
             <div style={Object.assign({}, styles.loadBtnContainer, fileIsLoaded ? {display: 'none'} : {})}>
                 <button title="Load locale file" type="button" className="btn btn-default"
                         style={styles.loadBtn} onClick={onLoadFileClick}>
-                    <span className="glyphicon glyphicon-load" /> Load Locale File
+                    <span className="glyphicon glyphicon-download-alt" /> Load Locale File
+                </button>
+            </div>
+            <div style={Object.assign({}, styles.loadBtnContainer, fileIsLoaded ? {display: 'none'} : {})}>
+                <button title="Select any file in a folder.  A 'locales' sub-folder will be created, with a new en.json." type="button" className="btn btn-default"
+                        style={styles.loadBtn} onClick={onCreateFileClick}>
+                    <span className="glyphicon glyphicon-file" /> Create en.json Locale File
                 </button>
             </div>
             <div style={Object.assign({}, styles.saveBtnContainer, fileIsLoaded ? {display: 'inline'} : {})}>
@@ -250,7 +266,7 @@ const Sidebar = ({allContexts, selectedContext, myFile, windowHeight, filePathCh
             <input ref={node => fileSaveAs = node} type="file" style={styles.loadFile}
                    onChange={onSaveAsInputChanged} />
 
-            <div className="js-contextListRegion">
+            <div>
                 <div className="bg-info" style={styles.listContainer}>
                     <table className="table table-hover">
                         <tbody style={styles.contextItem}>
